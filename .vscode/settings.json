@@ -9,5 +9,6 @@
         ".classpath": true,
         ".settings": true,
         ".project": true
-    }
+    },
+    "java.configuration.updateBuildConfiguration": "automatic"
 }
