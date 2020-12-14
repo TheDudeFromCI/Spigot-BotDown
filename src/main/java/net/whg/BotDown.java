@@ -3,12 +3,11 @@ package net.whg;
 import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.whg.match.MatchEvents;
 import net.whg.match.MatchManager;
-import net.whg.spawn.SpawnHubEvents;
+import net.whg.spawn.SpawnManager;
 import net.whg.util.Lang;
 import net.whg.world.PreventSaveEvent;
 
@@ -38,48 +37,22 @@ public class BotDown extends JavaPlugin {
     }
 
     private Lang lang;
-    private Location spawnLocation;
     private MatchManager matchManager;
+    private SpawnManager spawnManager;
 
     @Override
     public void onEnable() {
         initializeLogger(getLogger());
-
-        BotDown.log().info("Creating default config if not present.");
         saveDefaultConfig();
 
-        loadTranslations();
-        loadSpawnLocation();
+        lang = new Lang(this, "translations.yml");
+        spawnManager = new SpawnManager(this);
         initializeMatchManager();
 
         registerEvents();
         disableWorldSaving();
 
         BotDown.log().info("Plugin enabled.");
-    }
-
-    /**
-     * Load the translations config file.
-     */
-    private void loadTranslations() {
-        BotDown.log().info("Loading translations.");
-        lang = new Lang(this, "translations.yml");
-    }
-
-    /**
-     * Loads the spawn location from the config file.
-     */
-    private void loadSpawnLocation() {
-        BotDown.log().info("Loading spawn location.");
-
-        var config = getConfig();
-        spawnLocation = config.getLocation("main.spawn");
-
-        if (spawnLocation == null)
-            throw new IllegalStateException("Spawn location not initialized!");
-
-        var world = Bukkit.getWorld("world");
-        world.setSpawnLocation(spawnLocation);
     }
 
     /**
@@ -97,7 +70,6 @@ public class BotDown extends JavaPlugin {
         BotDown.log().info("Registering events.");
         var pluginManager = getServer().getPluginManager();
 
-        pluginManager.registerEvents(new SpawnHubEvents(lang, spawnLocation), this);
         pluginManager.registerEvents(new MatchEvents(matchManager), this);
         pluginManager.registerEvents(new PreventSaveEvent(), this);
     }
@@ -112,5 +84,24 @@ public class BotDown extends JavaPlugin {
         var world = Bukkit.getWorld("world");
         world.setAutoSave(false);
         world.setKeepSpawnInMemory(false);
+    }
+
+    /**
+     * Gets the plugin language messages.
+     * 
+     * @return The language translation config, or null if the plugin has not yet
+     *         been enabled.
+     */
+    public Lang getLang() {
+        return lang;
+    }
+
+    /**
+     * Gets the plugin spawn manager.
+     * 
+     * @return The spawn manager.
+     */
+    public SpawnManager getSpawnManager() {
+        return spawnManager;
     }
 }

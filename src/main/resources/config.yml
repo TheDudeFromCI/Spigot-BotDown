@@ -1,4 +1,5 @@
-main:
+world:
+  name: world
   spawn:
     ==: org.bukkit.Location
     world: world
