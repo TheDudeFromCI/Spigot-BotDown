@@ -42,11 +42,6 @@ public class BotDown extends JavaPlugin {
     private MatchManager matchManager;
 
     @Override
-    public void onDisable() {
-        BotDown.log().info("Plugin disabled.");
-    }
-
-    @Override
     public void onEnable() {
         initializeLogger(getLogger());
 
