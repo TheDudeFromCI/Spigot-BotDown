@@ -1,5 +1,6 @@
 package net.whg;
 
+import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.whg.spawn.SpawnHubEvents;
@@ -11,6 +12,7 @@ import net.whg.util.Lang;
 public class BotDown extends JavaPlugin {
 
     private Lang lang;
+    private Location spawnLocation;
 
     @Override
     public void onDisable() {
@@ -19,7 +21,11 @@ public class BotDown extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        saveDefaultConfig();
+
         loadTranslations();
+        loadSpawnLocation();
+
         registerEvents();
 
         getLogger().info("Plugin enabled.");
@@ -33,10 +39,21 @@ public class BotDown extends JavaPlugin {
     }
 
     /**
+     * Loads the spawn location from the config file.
+     */
+    private void loadSpawnLocation() {
+        var config = getConfig();
+        spawnLocation = config.getLocation("main.spawn");
+
+        if (spawnLocation == null)
+            throw new IllegalStateException("Spawn location not initialized!");
+    }
+
+    /**
      * Registers all event listeners.
      */
     private void registerEvents() {
         var pluginManager = getServer().getPluginManager();
-        pluginManager.registerEvents(new SpawnHubEvents(lang), this);
+        pluginManager.registerEvents(new SpawnHubEvents(lang, spawnLocation), this);
     }
 }
