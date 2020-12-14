@@ -2,6 +2,7 @@ package net.whg.match;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -13,6 +14,7 @@ import net.whg.BotDown;
  */
 public class MatchManager {
     private final ArrayList<Match> matches = new ArrayList<>();
+    private final Logger log;
 
     /**
      * Creates a new match manager.
@@ -20,6 +22,8 @@ public class MatchManager {
      * @param plugin - The BotDown plugin instance.
      */
     public MatchManager(BotDown plugin) {
+        log = plugin.getLogger();
+
         var pluginManager = Bukkit.getPluginManager();
         var events = new MatchEvents(this);
         pluginManager.registerEvents(events, plugin);
@@ -34,7 +38,7 @@ public class MatchManager {
         var match = new Match();
         matches.add(match);
 
-        BotDown.log().info("Created new bot match " + match.getUUID());
+        log.info("Created new bot match " + match.getUUID());
         return match;
     }
 
