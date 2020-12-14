@@ -6,15 +6,26 @@ import org.bukkit.event.player.PlayerJoinEvent;
 
 import net.whg.util.Lang;
 
+/**
+ * Events related to the server spawn hub.
+ */
 public class SpawnHubManager implements Listener {
     private final Lang lang;
 
+    /**
+     * Creates a new spawn hub manager.
+     */
     public SpawnHubManager(Lang lang) {
         this.lang = lang;
     }
 
+    /**
+     * Listens for when a player joins to send them a welcome message.
+     * 
+     * @param event - The event that was called.
+     */
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event) {
+    public void sendWelcomeMessage(PlayerJoinEvent event) {
         var player = event.getPlayer();
         player.spigot().sendMessage(lang.getRawMessage("main.welcome", player.getLocale()));
     }
