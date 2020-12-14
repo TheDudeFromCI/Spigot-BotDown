@@ -30,14 +30,31 @@ public class Lang {
      * 
      * @param path   - The message path.
      * @param locale - The player's locale.
+     * @param args   - The message formatting arguments.
      * @return The raw message component array.
      */
-    public BaseComponent[] getRawMessage(String path, String locale) {
+    public BaseComponent[] getRawMessage(String path, String locale, String... args) {
         var message = getMessageByLocale(path, locale);
+        message = replaceArgs(message, args);
         message = replaceLinks(message);
         message = replaceColors(message);
 
         return JsonMessageConverter.DEFAULT.convert(message);
+    }
+
+    /**
+     * Replaces the formatting arguments in the message with with the argument
+     * values.
+     * 
+     * @param message - The message.
+     * @param args    - The argument values.
+     * @return The message with arguments inserted in.
+     */
+    private String replaceArgs(String message, String[] args) {
+        for (int i = 0; i < args.length; i++)
+            message = message.replace("${" + i + "}", args[i]);
+
+        return message;
     }
 
     /**
