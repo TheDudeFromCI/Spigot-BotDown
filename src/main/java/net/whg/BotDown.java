@@ -2,6 +2,7 @@ package net.whg;
 
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -9,6 +10,7 @@ import net.whg.match.MatchEvents;
 import net.whg.match.MatchManager;
 import net.whg.spawn.SpawnHubEvents;
 import net.whg.util.Lang;
+import net.whg.world.PreventSaveEvent;
 
 /**
  * The main plugin container for BotDown.
@@ -56,6 +58,7 @@ public class BotDown extends JavaPlugin {
         initializeMatchManager();
 
         registerEvents();
+        disableWorldSaving();
 
         BotDown.log().info("Plugin enabled.");
     }
@@ -64,7 +67,7 @@ public class BotDown extends JavaPlugin {
      * Load the translations config file.
      */
     private void loadTranslations() {
-        getLogger().info("Loading translations.");
+        BotDown.log().info("Loading translations.");
         lang = new Lang(this, "translations.yml");
     }
 
@@ -79,6 +82,9 @@ public class BotDown extends JavaPlugin {
 
         if (spawnLocation == null)
             throw new IllegalStateException("Spawn location not initialized!");
+
+        var world = Bukkit.getWorld("world");
+        world.setSpawnLocation(spawnLocation);
     }
 
     /**
@@ -98,5 +104,18 @@ public class BotDown extends JavaPlugin {
 
         pluginManager.registerEvents(new SpawnHubEvents(lang, spawnLocation), this);
         pluginManager.registerEvents(new MatchEvents(matchManager), this);
+        pluginManager.registerEvents(new PreventSaveEvent(), this);
+    }
+
+    /**
+     * This disables auto save on the main world to prevent the world from being
+     * edited as a result of the match creation.
+     */
+    private void disableWorldSaving() {
+        BotDown.log().info("Disabling world auto save.");
+
+        var world = Bukkit.getWorld("world");
+        world.setAutoSave(false);
+        world.setKeepSpawnInMemory(false);
     }
 }
