@@ -2,7 +2,7 @@ package net.whg;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.whg.spawn.SpawnHubManager;
+import net.whg.spawn.SpawnHubEvents;
 import net.whg.util.Lang;
 
 /**
@@ -37,6 +37,6 @@ public class BotDown extends JavaPlugin {
      */
     private void registerEvents() {
         var pluginManager = getServer().getPluginManager();
-        pluginManager.registerEvents(new SpawnHubManager(lang), this);
+        pluginManager.registerEvents(new SpawnHubEvents(lang), this);
     }
 }

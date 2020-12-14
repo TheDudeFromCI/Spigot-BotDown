@@ -9,13 +9,13 @@ import net.whg.util.Lang;
 /**
  * Events related to the server spawn hub.
  */
-public class SpawnHubManager implements Listener {
+public class SpawnHubEvents implements Listener {
     private final Lang lang;
 
     /**
      * Creates a new spawn hub manager.
      */
-    public SpawnHubManager(Lang lang) {
+    public SpawnHubEvents(Lang lang) {
         this.lang = lang;
     }
 
