@@ -1,0 +1,14 @@
+main:
+  welcome:
+    en_US: >-
+      &8=== { &7Welcome to the BotDown battle server! &8} ===
+
+      &7Feel free to roam around the server hub to read the server rules,
+      explore available game modes, and check out the leader boards.
+
+
+      &7To spectate a match or bot, use &6/help sp
+
+      &7For bots, please use the official ![&9&nMineflayer BotDown plugin](https://github.com/TheDudeFromCI/mineflayer-botdown)&r&7.
+
+      &8=== { 1/1 } ===

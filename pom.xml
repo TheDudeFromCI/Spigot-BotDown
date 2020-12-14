@@ -23,6 +23,12 @@
       <id>spigot-repo</id>
       <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
     </repository>
+
+    <!-- Adds the JsonMessageMaker plugin to the build -->
+    <repository>
+      <id>janmm14-public</id>
+      <url>https://repo.janmm14.de/artifactory/public/</url>
+    </repository>
   </repositories>
 
   <dependencies>
@@ -48,6 +54,13 @@
       <artifactId>spigot-api</artifactId>
       <version>1.16.4-R0.1-SNAPSHOT</version>
       <scope>provided</scope>
+    </dependency>
+
+    <!-- https://github.com/Janmm14/JsonMessageMaker -->
+    <dependency>
+      <groupId>de.janmm14</groupId>
+      <artifactId>jsonmessagemaker</artifactId>
+      <version>3.1.0</version>
     </dependency>
   </dependencies>
 

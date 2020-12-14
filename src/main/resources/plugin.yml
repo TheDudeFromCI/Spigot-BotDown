@@ -1,9 +1,11 @@
 main: net.whg.BotDown
 name: BotDown
 version: 0.0.1
+api-version: 1.16
 description: A Minecraft Spigot plugin for a competitive bot battle server.
 author: TheDudeFromCI
 website: https://github.com/TheDudeFromCI/Spigot-BotDown
+depend: [JsonMessageMaker]
 commands:
   match:
     description: Called by a bot to join a match.
