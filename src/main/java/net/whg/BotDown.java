@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import net.whg.match.MatchEvents;
 import net.whg.match.MatchManager;
 import net.whg.spawn.SpawnManager;
 import net.whg.util.Lang;
@@ -47,20 +46,12 @@ public class BotDown extends JavaPlugin {
 
         lang = new Lang(this, "translations.yml");
         spawnManager = new SpawnManager(this);
-        initializeMatchManager();
+        matchManager = new MatchManager(this);
 
         registerEvents();
         disableWorldSaving();
 
         BotDown.log().info("Plugin enabled.");
-    }
-
-    /**
-     * Initializes the match manager.
-     */
-    private void initializeMatchManager() {
-        BotDown.log().info("Loading match manager.");
-        matchManager = new MatchManager();
     }
 
     /**
@@ -70,7 +61,6 @@ public class BotDown extends JavaPlugin {
         BotDown.log().info("Registering events.");
         var pluginManager = getServer().getPluginManager();
 
-        pluginManager.registerEvents(new MatchEvents(matchManager), this);
         pluginManager.registerEvents(new PreventSaveEvent(), this);
     }
 
@@ -103,5 +93,14 @@ public class BotDown extends JavaPlugin {
      */
     public SpawnManager getSpawnManager() {
         return spawnManager;
+    }
+
+    /**
+     * Gets the plugin match manager.
+     * 
+     * @return The match manager.
+     */
+    public MatchManager getMatchManager() {
+        return matchManager;
     }
 }
