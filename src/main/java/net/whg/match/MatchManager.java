@@ -16,6 +16,7 @@ public class MatchManager {
     private final ArrayList<Match> matches = new ArrayList<>();
     private final ArrayList<Minigame> minigames = new ArrayList<>();
     private final MatchPositionIterator matchPositionIterator;
+    private final ArenaBuilder arenaBuilder;
     private final Queue queue;
     private final Logger log;
     private final int arenaSize;
@@ -32,6 +33,7 @@ public class MatchManager {
         arenaSize = plugin.getConfig().getInt("match.size", 1000);
 
         matchPositionIterator = new MatchPositionIterator(arenaSize);
+        arenaBuilder = new ArenaBuilder(plugin);
 
         var pluginManager = Bukkit.getPluginManager();
         var events = new MatchEvents(this);
@@ -50,6 +52,8 @@ public class MatchManager {
 
         var match = new Match(matchPos.getValue0(), matchPos.getValue1(), arenaSize);
         matches.add(match);
+
+        arenaBuilder.buildArena(match);
 
         log.info("Created new bot match " + match.getUUID());
         return match;
