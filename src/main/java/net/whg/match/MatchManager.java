@@ -105,8 +105,34 @@ public class MatchManager {
      * Adds a bot entry to the end of the match queue.
      * 
      * @param entry - The bot entry.
+     * @throws AlreadyInMatchException If the player is already in a match or in the
+     *                                 queue.
      */
     public void addBotToQueue(BotEntry entry) {
+        var inMatch = matches.stream().anyMatch(m -> m.getPlayers().contains(entry.getBot()));
+        if (inMatch)
+            throw new AlreadyInMatchException(entry.getBot(), false);
+
         queue.addEntry(entry);
+    }
+
+    /**
+     * Removes the given player from all matches they are currently in.
+     * 
+     * @param player - The player to remove.
+     */
+    public void removeFromAllMatches(Player player) {
+        for (var match : findPlayer(player)) {
+            match.removePlayer(player);
+        }
+    }
+
+    /**
+     * Removes the given player from the queue if they are currently in it.
+     * 
+     * @param player - The player to remove.
+     */
+    public void removeFromQueue(Player player) {
+        queue.removePlayer(player);
     }
 }

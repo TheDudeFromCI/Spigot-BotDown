@@ -1,6 +1,5 @@
 package net.whg.match;
 
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -28,17 +27,7 @@ public class MatchEvents implements Listener {
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event) {
         var player = event.getPlayer();
-        removeFromAllMatches(player);
-    }
-
-    /**
-     * Removes the given player from all matches they are currently in.
-     * 
-     * @param player - The player to remove.
-     */
-    private void removeFromAllMatches(Player player) {
-        for (var match : matchManager.findPlayer(player)) {
-            match.removePlayer(player);
-        }
+        matchManager.removeFromAllMatches(player);
+        matchManager.removeFromQueue(player);
     }
 }

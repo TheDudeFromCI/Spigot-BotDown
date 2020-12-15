@@ -1,17 +1,17 @@
 package net.whg.match;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;
 
+import net.whg.util.PartialReadonlyList;
+
 /**
  * Represents an active match.
  */
-public class Match {
-    private final ArrayList<Player> players = new ArrayList<>();
+class Match {
+    private final PartialReadonlyList<Player> players = new PartialReadonlyList<>();
     private final UUID uuid;
     private boolean active = false;
 
@@ -25,14 +25,14 @@ public class Match {
     /**
      * Adds a new player to this match.
      */
-    public void addPlayer(Player player) {
+    void addPlayer(Player player) {
         players.add(player);
     }
 
     /**
      * Removes a player from this match.
      */
-    public void removePlayer(Player player) {
+    void removePlayer(Player player) {
         players.remove(player);
     }
 
@@ -42,7 +42,7 @@ public class Match {
      * @return A read-only list of all players.
      */
     public List<Player> getPlayers() {
-        return Collections.unmodifiableList(players);
+        return players.readonly();
     }
 
     /**
