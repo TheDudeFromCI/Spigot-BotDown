@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 /**
@@ -11,14 +12,17 @@ import org.bukkit.entity.Player;
  */
 class Queue {
     private final List<BotEntry> entries = new ArrayList<>();
+    private final MatchManager matchManager;
     private final Logger log;
 
     /**
      * Creates a new queue.
      * 
-     * @param log - The logger for this object.
+     * @param matchManager - The match manager.
+     * @param log          - The logger for this object.
      */
-    Queue(Logger log) {
+    Queue(MatchManager matchManager, Logger log) {
+        this.matchManager = matchManager;
         this.log = log;
     }
 
@@ -43,21 +47,22 @@ class Queue {
      * @param minigame - The minigame to check for.
      */
     private void checkForStart(Minigame minigame) {
-        var count = 0;
-        for (var entry : entries)
-            if (entry.getMinigame() == minigame)
-                count++;
-
+        var count = entries.stream().filter(e -> e.getMinigame() == minigame).count();
         if (count < minigame.getPlayerCount())
             return;
 
-        var participants = new ArrayList<BotEntry>();
+        log.info("Starting match for " + minigame.getName());
+        var match = matchManager.createMatch();
+
         for (var entry : entries) {
             if (entry.getMinigame() == minigame)
-                participants.add(entry);
+                match.addPlayer(entry.getBot());
         }
 
-        log.info("Starting match for " + minigame.getName());
+        entries.removeIf(e -> e.getMinigame() == minigame);
+
+        var matchStartedEvent = new MatchStartedEvent(match);
+        Bukkit.getPluginManager().callEvent(matchStartedEvent);
     }
 
     /**

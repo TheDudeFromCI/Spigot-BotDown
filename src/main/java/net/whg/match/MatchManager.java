@@ -15,8 +15,10 @@ import net.whg.BotDown;
 public class MatchManager {
     private final ArrayList<Match> matches = new ArrayList<>();
     private final ArrayList<Minigame> minigames = new ArrayList<>();
+    private final MatchPositionIterator matchPositionIterator;
     private final Queue queue;
     private final Logger log;
+    private final int arenaSize;
 
     /**
      * Creates a new match manager.
@@ -26,7 +28,10 @@ public class MatchManager {
     public MatchManager(BotDown plugin) {
         log = plugin.getLogger();
 
-        queue = new Queue(log);
+        queue = new Queue(this, log);
+        arenaSize = plugin.getConfig().getInt("match.size", 1000);
+
+        matchPositionIterator = new MatchPositionIterator(arenaSize);
 
         var pluginManager = Bukkit.getPluginManager();
         var events = new MatchEvents(this);
@@ -40,8 +45,10 @@ public class MatchManager {
      * 
      * @return The new match.
      */
-    public Match createMatch() {
-        var match = new Match();
+    Match createMatch() {
+        var matchPos = matchPositionIterator.next();
+
+        var match = new Match(matchPos.getValue0(), matchPos.getValue1(), arenaSize);
         matches.add(match);
 
         log.info("Created new bot match " + match.getUUID());
@@ -134,5 +141,14 @@ public class MatchManager {
      */
     public void removeFromQueue(Player player) {
         queue.removePlayer(player);
+    }
+
+    /**
+     * Gets the size value, in blocks, of match arenas in the world.
+     * 
+     * @return The arena size in blocks.
+     */
+    public int getArenaSize() {
+        return arenaSize;
     }
 }

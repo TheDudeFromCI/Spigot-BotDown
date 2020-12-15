@@ -10,15 +10,25 @@ import net.whg.util.PartialReadonlyList;
 /**
  * Represents an active match.
  */
-class Match {
+public class Match {
     private final PartialReadonlyList<Player> players = new PartialReadonlyList<>();
     private final UUID uuid;
+    private final int x;
+    private final int z;
+    private final int size;
     private boolean active = false;
 
     /**
      * Creates a new, empty match object.
+     * 
+     * @param x    - The x world position of this match.
+     * @param z    - The z world position of this match.
+     * @param size - The size of the match in blocks.
      */
-    Match() {
+    Match(int x, int z, int size) {
+        this.x = x;
+        this.z = z;
+        this.size = size;
         uuid = UUID.randomUUID();
     }
 
@@ -77,5 +87,32 @@ class Match {
      */
     public UUID getUUID() {
         return uuid;
+    }
+
+    /**
+     * Gets the world x position of this match arena.
+     * 
+     * @return The world x position.
+     */
+    public int x() {
+        return x;
+    }
+
+    /**
+     * Gets the world z position of this match arena.
+     * 
+     * @return The world z position.
+     */
+    public int z() {
+        return z;
+    }
+
+    /**
+     * Gets the size of this match arena in blocks.
+     * 
+     * @return The match size.
+     */
+    public int size() {
+        return size;
     }
 }
