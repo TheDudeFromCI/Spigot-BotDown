@@ -28,15 +28,19 @@ public class MatchManager {
      */
     public MatchManager(BotDown plugin) {
         log = plugin.getLogger();
+        var config = plugin.getConfig();
 
         queue = new Queue(this, log);
-        arenaSize = plugin.getConfig().getInt("match.size", 1000);
+        arenaSize = config.getInt("match.size", 1000);
 
         matchPositionIterator = new MatchPositionIterator(arenaSize);
         arenaBuilder = new ArenaBuilder(plugin);
 
+        var worldName = config.getString("world.name");
+        var world = Bukkit.getWorld(worldName);
+
         var pluginManager = Bukkit.getPluginManager();
-        var events = new MatchEvents(this);
+        var events = new MatchEvents(this, world);
         pluginManager.registerEvents(events, plugin);
 
         plugin.getCommand("match").setExecutor(new MatchCommand(plugin.getLang(), this));

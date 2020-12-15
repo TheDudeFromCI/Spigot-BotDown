@@ -1,5 +1,7 @@
 package net.whg.match;
 
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -9,14 +11,17 @@ import org.bukkit.event.player.PlayerQuitEvent;
  */
 public class MatchEvents implements Listener {
     private final MatchManager matchManager;
+    private final World world;
 
     /**
      * Creates a new match event listener.
      * 
      * @param matchManager - The match manager this listener is manipulating.
+     * @param world        - The world the matches are taking place on.
      */
-    public MatchEvents(MatchManager matchManager) {
+    public MatchEvents(MatchManager matchManager, World world) {
         this.matchManager = matchManager;
+        this.world = world;
     }
 
     /**
@@ -29,5 +34,14 @@ public class MatchEvents implements Listener {
         var player = event.getPlayer();
         matchManager.removeFromAllMatches(player);
         matchManager.removeFromQueue(player);
+    }
+
+    @EventHandler
+    public void onMatchStart(MatchStartedEvent event) {
+        var match = event.getMatch();
+        var location = new Location(world, match.x() + match.size() / 2, 65, match.z() + match.size() / 2);
+        for (var player : match.getPlayers()) {
+            player.teleport(location);
+        }
     }
 }
