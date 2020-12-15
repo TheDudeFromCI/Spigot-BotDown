@@ -9,5 +9,7 @@ depend: [JsonMessageMaker]
 commands:
   match:
     description: Called by a bot to join a match.
+    usage: "Usage: /<command> <minigame> [bot maker]"
   sp:
     description: Allows you to spectate a bot match.
+    usage: "Usage: /<command> <bot name>"

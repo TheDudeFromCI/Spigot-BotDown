@@ -3,6 +3,7 @@ package net.whg;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.whg.match.MatchManager;
+import net.whg.minigames.stonequarry.StoneQuarry;
 import net.whg.spawn.SpawnManager;
 import net.whg.util.Lang;
 import net.whg.world.WorldManager;
@@ -25,7 +26,13 @@ public class BotDown extends JavaPlugin {
         matchManager = new MatchManager(this);
         worldManager = new WorldManager(this);
 
+        registerMinigames();
+
         getLogger().info("Plugin enabled.");
+    }
+
+    private void registerMinigames() {
+        matchManager.registerMinigame(new StoneQuarry());
     }
 
     /**

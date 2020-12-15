@@ -14,6 +14,8 @@ import net.whg.BotDown;
  */
 public class MatchManager {
     private final ArrayList<Match> matches = new ArrayList<>();
+    private final ArrayList<Minigame> minigames = new ArrayList<>();
+    private final Queue queue;
     private final Logger log;
 
     /**
@@ -24,9 +26,13 @@ public class MatchManager {
     public MatchManager(BotDown plugin) {
         log = plugin.getLogger();
 
+        queue = new Queue(log);
+
         var pluginManager = Bukkit.getPluginManager();
         var events = new MatchEvents(this);
         pluginManager.registerEvents(events, plugin);
+
+        plugin.getCommand("match").setExecutor(new MatchCommand(plugin.getLang(), this));
     }
 
     /**
@@ -67,5 +73,40 @@ public class MatchManager {
     public void endMatch(Match match) {
         match.end();
         matches.remove(match);
+    }
+
+    /**
+     * Registers a new minigame type.
+     * 
+     * @param minigame - The minigame to register.
+     */
+    public void registerMinigame(Minigame minigame) {
+        minigames.add(minigame);
+        log.info("Registered minigame: " + minigame.getName());
+    }
+
+    /**
+     * Finds a registered minigame with the given name. The name is not case
+     * sensitive.
+     * 
+     * @param name - The name of the minigame.
+     * @return The minigame, or null if no minigame could be found for the given
+     *         name.
+     */
+    public Minigame findMinigame(String name) {
+        for (var minigame : minigames)
+            if (minigame.getName().equalsIgnoreCase(name))
+                return minigame;
+
+        return null;
+    }
+
+    /**
+     * Adds a bot entry to the end of the match queue.
+     * 
+     * @param entry - The bot entry.
+     */
+    public void addBotToQueue(BotEntry entry) {
+        queue.addEntry(entry);
     }
 }

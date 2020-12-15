@@ -12,6 +12,7 @@
     },
     "java.configuration.updateBuildConfiguration": "automatic",
     "cSpell.words": [
-        "Bukkit"
+        "Bukkit",
+        "minigame"
     ]
 }
