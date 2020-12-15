@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import de.janmm14.jsonmessagemaker.api.JsonMessageConverter;
@@ -97,5 +98,18 @@ public class Lang {
             return textConfig.getString(path + ".en_US");
 
         throw new UnknownMessageException(path);
+    }
+
+    /**
+     * Sends the message at the given path to the player. The message respects the
+     * player's locale preferences.
+     * 
+     * @param player - The player to send the message to.
+     * @param path   - The message path in the translation file.
+     * @param args   - The formatting arguments.
+     */
+    public void sendMessage(Player player, String path, String... args) {
+        var message = getRawMessage(path, player.getLocale(), args);
+        player.spigot().sendMessage(message);
     }
 }
